@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      - DEBUG=true
+      - POSTGRES_DB=garbagecollector
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASS=postgres
+    volumes:
+      - /var/lib/postgresql/data:/var/lib/postgresql/data
