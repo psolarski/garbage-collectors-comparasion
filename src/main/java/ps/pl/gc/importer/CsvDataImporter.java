@@ -2,10 +2,13 @@ package ps.pl.gc.importer;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
@@ -19,7 +22,7 @@ import ps.pl.gc.model.Employee;
 
 @Configuration
 @EnableBatchProcessing
-public class CsvDataImporter {
+public class CsvDataImporter extends DefaultBatchConfigurer {
 
     private final JobBuilderFactory jobBuilderFactory;
 
@@ -35,6 +38,13 @@ public class CsvDataImporter {
         this.jobBuilderFactory = jobBuilderFactory;
         this.stepBuilderFactory = stepBuilderFactory;
         this.databaseItemWriter = databaseItemWriter;
+    }
+
+    @Override
+    protected JobRepository createJobRepository() throws Exception {
+        MapJobRepositoryFactoryBean factoryBean = new MapJobRepositoryFactoryBean();
+        factoryBean.afterPropertiesSet();
+        return factoryBean.getObject();
     }
 
     @Bean
