@@ -1,10 +1,7 @@
 package ps.pl.gc.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ps.pl.gc.algorithms.*;
 import ps.pl.gc.model.Employee;
 import ps.pl.gc.service.EmployeeService;
@@ -38,5 +35,13 @@ public class EmployeeController {
         List<Employee> employees = this.employeeService.getEmployeeList(page, elements, algorithm);
         System.out.println("Processed all information about employees");
         return ResponseEntity.ok(employees);
+    }
+
+    @PostMapping("")
+    private ResponseEntity<Employee> createEmployee(
+        @RequestBody Employee employee
+    ) {
+        Employee createdEmployee = this.employeeService.createEmployee(employee);
+        return ResponseEntity.ok(createdEmployee);
     }
 }

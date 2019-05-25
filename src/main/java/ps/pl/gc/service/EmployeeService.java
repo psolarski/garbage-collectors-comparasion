@@ -9,11 +9,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
 import ps.pl.gc.algorithms.Algorithm;
+import ps.pl.gc.algorithms.BubbleSort;
 import ps.pl.gc.algorithms.QuickSort;
 import ps.pl.gc.algorithms.SortAlgorithm;
 import ps.pl.gc.model.Employee;
 import ps.pl.gc.repositories.EmployeeRepository;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -49,22 +52,26 @@ public class EmployeeService {
             Algorithm algorithm
     ) {
         Pageable pageable = PageRequest.of(page, elements);
-        List<Employee> employeeList = this.employeeRepository.findAll(pageable).getContent();
-        SortAlgorithm sortAlgorithm = null;
+        ArrayList<Employee> employees = new ArrayList<>(
+                this.employeeRepository.findAll(pageable).getContent()
+        );
         switch (algorithm) {
             case QUICK: {
-                sortAlgorithm = new QuickSort();
+                QuickSort.sort(employees);
                 break;
             }
             case BUBBLE: {
-
+                BubbleSort.sort(employees);
                 break;
             }
         }
-        sortAlgorithm.sort(employeeList);
-        employeeList.forEach(it -> {
+        employees.forEach(it -> {
             it.setFirstName(it.getFirstName() + " GC!");
         });
-        return employeeList;
+        return employees;
+    }
+
+    public Employee createEmployee(Employee employee) {
+        return this.employeeRepository.saveAndFlush(employee);
     }
 }
