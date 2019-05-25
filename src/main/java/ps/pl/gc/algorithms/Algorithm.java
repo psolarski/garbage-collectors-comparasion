@@ -1,6 +1,6 @@
-package ps.pl.gc;
+package ps.pl.gc.algorithms;
 
-enum Algorithms {
+public enum Algorithm {
     QUICK,
     BUBBLE
 }
